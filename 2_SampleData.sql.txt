@@ -1,0 +1,20 @@
+USE fastfoodpos;
+
+-- Insert baseline parent data required for foreign keys
+INSERT INTO Branch (Location) VALUES ('Main Branch');
+INSERT INTO Customer (CustomerName, PhoneNo) VALUES ('Walk-in Customer', '00000000000');
+INSERT INTO Employee (EmployeeName, Role, BranchId) VALUES ('Default Cashier', 'Cashier', 1);
+
+-- Insert sample historical orders for analytics
+INSERT INTO `Order` (Status, Channel, Total, EmployeeId, CustomerId, OrderDate, IsArchived) VALUES 
+('Completed', 'Dine-In', 250.00, 1, 1, DATE_SUB(CURDATE(), INTERVAL 2 MONTH), TRUE),
+('Completed', 'Take-Out', 450.00, 1, 1, DATE_SUB(CURDATE(), INTERVAL 1 MONTH), TRUE),
+('Completed', 'Dine-In', 150.00, 1, 1, DATE_SUB(CURDATE(), INTERVAL 5 DAY), TRUE),
+('Completed', 'Take-Out', 300.00, 1, 1, CURDATE(), TRUE);
+
+-- Insert corresponding payments linked to the sample orders
+INSERT INTO Payment (Amount, Method, PaymentStatus, OrderId) VALUES 
+(250.00, 'Cash', 'Completed', 1),
+(450.00, 'Card', 'Completed', 2),
+(150.00, 'E-Wallet', 'Completed', 3),
+(300.00, 'Cash', 'Completed', 4);

@@ -1,0 +1,53 @@
+CREATE DATABASE IF NOT EXISTS fastfoodpos;
+USE fastfoodpos;
+
+CREATE TABLE Branch (
+    BranchId INT AUTO_INCREMENT PRIMARY KEY,
+    Location VARCHAR(255)
+);
+
+CREATE TABLE Customer (
+    CustomerId INT AUTO_INCREMENT PRIMARY KEY,
+    CustomerName VARCHAR(255),
+    PhoneNo VARCHAR(50)
+);
+
+CREATE TABLE Employee (
+    EmployeeId INT AUTO_INCREMENT PRIMARY KEY,
+    EmployeeName VARCHAR(255),
+    Role VARCHAR(100),
+    BranchId INT,
+    FOREIGN KEY (BranchId) REFERENCES Branch(BranchId)
+);
+
+CREATE TABLE `Order` (
+    OrderId INT AUTO_INCREMENT PRIMARY KEY,
+    Status VARCHAR(50),
+    Channel VARCHAR(50),
+    Total DECIMAL(10, 2),
+    EmployeeId INT,
+    CustomerId INT,
+    OrderDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    IsArchived BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (EmployeeId) REFERENCES Employee(EmployeeId),
+    FOREIGN KEY (CustomerId) REFERENCES Customer(CustomerId)
+);
+
+CREATE TABLE Payment (
+    PaymentId INT AUTO_INCREMENT PRIMARY KEY,
+    Amount DECIMAL(10, 2),
+    Method VARCHAR(50),
+    PaymentDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PaymentStatus VARCHAR(50),
+    OrderId INT,
+    FOREIGN KEY (OrderId) REFERENCES `Order`(OrderId)
+);
+
+CREATE TABLE MenuItem (
+    MenuId INT AUTO_INCREMENT PRIMARY KEY,
+    MenuName VARCHAR(255),
+    Category VARCHAR(100),
+    Price DECIMAL(10, 2),
+    OrderId INT,
+    FOREIGN KEY (OrderId) REFERENCES `Order`(OrderId)
+);
